@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+ms-editor-squiggler {
+  position: fixed;
+}
+
+editor-squiggler {
+  position: fixed;
+}
+
+[contenteditable="true"]:empty:before {
+  content: attr(placeholder);
+  color: grey;
+}
+
+#messages-container img:not(.ac-adaptiveCard *) {
+  width: unset !important;
+  height: unset !important;
+  max-width: 384px;
+  display: inline-block;
+}
+
+#default-message code:not(pre code),
+#default-message pre:has(code) {
+  @apply rounded-lg px-2 py-1 border border-zinc-800 inline-block text-xs leading-3 !bg-transparent whitespace-pre-wrap;
+}
+
+#messages-container ul {
+  /* spacing */
+  @apply list-disc-inside space-y-1;
+}
+
+pre > pre {
+  background-color: transparent !important;
+}
+
+#message-text-display a {
+  @apply text-purple hover:text-purple-300 transition-colors;
+}
+
+#message-text-display table {
+  @apply overflow-x-auto block whitespace-nowrap my-1 border border-zinc-800 rounded-lg scrollbar scrollbar-thumb-color-zinc-600 scrollbar-track-color-transparent scrollbar-rounded;
+  --scrollbar-height: 4px !important;
+  --scrollbar-track-radius: 0.5rem !important;
+  --scrollbar-thumb-radius: 0.5rem !important;
+  width: min-content;
+}
+
+#message-text-display table thead {
+  @apply text-left bg-zinc-800;
+}
+
+th {
+  @apply px-3 py-1 !text-left;
+}
+
+td {
+  @apply px-3 py-1 !text-left;
+}
+
+#message-text-display table tbody:has(tr) {
+  @apply border-t border-zinc-800 px-2 py-1;
+}
+
+#message-text-display li > p {
+  @apply inline;
+}
+#message-text-display ul,
+#message-text-display ol {
+  @apply ml-2 my-1;
+}
+#message-text-display b,
+#message-text-display strong {
+  @apply font-semibold;
+}
+
+.ac-container.ac-adaptiveCard:not(.ac-container.ac-adaptiveCard *) {
+  @apply !bg-transparent border border-zinc-800 rounded-lg;
+}
+.ac-container.ac-adaptiveCard .ac-container.ac-adaptiveCard {
+  @apply !bg-transparent border-t border-zinc-800;
+}
+.ac-adaptiveCard * {
+  @apply text-white!;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+}
+
+.ac-pushButton,
+.ac-dateInput,
+.ac-textInput {
+  @apply border border-zinc-800 rounded-lg px-3 py-1.5 !bg-[rgb(12,12,13)];
+}
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+input:-webkit-autofill {
+  /* -webkit-box-shadow: 0 0 0 30px rgb(12 12 13 / 0%) inset !important; */
+  -webkit-text-fill-color: black !important;
+  background-color: #faffbd !important;
+  background-image: none !important;
+  color: #000000 !important;
+}
+
+input:-webkit-autofill + #showPass {
+  @apply !text-zinc-800;
+}
+
+input:-webkit-autofill + #showPass:hover {
+  color: #fff !important;
+}
