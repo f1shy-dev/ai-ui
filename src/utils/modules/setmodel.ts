@@ -2,7 +2,7 @@ import { ChatModule } from ".";
 import { models } from "../models";
 import { settings } from "../settings";
 
-export const setmodel: ChatModule = async (message, responseID) => {
+export const setmodel: ChatModule = async (message) => {
   const newModel = message.split(" ")[1];
   if (!newModel) {
     return {

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import * as AdaptiveCards from "adaptivecards";
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { handleCardAction } from "@/utils/modules/teams_mode";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
@@ -11,6 +11,7 @@ import {
   modelPricingPerInputToken,
   modelPricingPerOutputToken,
 } from "@/utils/models";
+import { adaptiveCardFactory } from "@/utils/moduleFactory";
 const tag_class = `bg-[rgb(12,12,13)] border-zinc-800 border justify-center items-center rounded-lg text-center text-xs px-2.5 py-1.5 w-fit`;
 const supportedLangs = [
   "abap",
@@ -238,12 +239,12 @@ const all_functions = [
 const fcUIMap: {
   [key: string]: (name: string, args: any) => { icon: string; message: string };
 } = {
-  search_web: (name, args) => ({
+  search_web: (_name, args) => ({
     // icon: "M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z",
     icon: "M232.49,215.51,185,168a92.12,92.12,0,1,0-17,17l47.53,47.54a12,12,0,0,0,17-17ZM44,112a68,68,0,1,1,68,68A68.07,68.07,0,0,1,44,112Z",
     message: `Searching ${args.query ? `for \`${args.query}\`` : "the web..."}`,
   }),
-  get_text_from_urls: (name, args) => {
+  get_text_from_urls: (_name, args) => {
     return {
       icon: "M216,36H40A20,20,0,0,0,20,56V200a20,20,0,0,0,20,20H216a20,20,0,0,0,20-20V56A20,20,0,0,0,216,36Zm-4,24V84H44V60ZM44,196V108H212v88Z",
       message: `Getting text from ${
@@ -265,7 +266,7 @@ const fcUIMap: {
       }`,
     };
   },
-  run_code: (name, args) => ({
+  run_code: (_name, args) => ({
     icon: "M71.68,97.22,34.74,128l36.94,30.78a12,12,0,1,1-15.36,18.44l-48-40a12,12,0,0,1,0-18.44l48-40A12,12,0,0,1,71.68,97.22Zm176,21.56-48-40a12,12,0,1,0-15.36,18.44L221.26,128l-36.94,30.78a12,12,0,1,0,15.36,18.44l48-40a12,12,0,0,0,0-18.44ZM164.1,28.72a12,12,0,0,0-15.38,7.18l-64,176a12,12,0,0,0,7.18,15.37A11.79,11.79,0,0,0,96,228a12,12,0,0,0,11.28-7.9l64-176A12,12,0,0,0,164.1,28.72Z",
     message: `Running ${
       args.code && args.language
@@ -275,13 +276,13 @@ const fcUIMap: {
         : "code of unknown language"
     }`,
   }),
-  evaluate_math: (name, args) => ({
+  evaluate_math: (_name, args) => ({
     icon: "M208.49,64.49l-144,144a12,12,0,0,1-17-17l144-144a12,12,0,0,1,17,17ZM60,112a12,12,0,0,0,24,0V84h28a12,12,0,0,0,0-24H84V32a12,12,0,0,0-24,0V60H32a12,12,0,0,0,0,24H60Zm164,60H144a12,12,0,0,0,0,24h80a12,12,0,0,0,0-24Z",
     message: `Evaluating math expression${
       args.expression ? ` \`${args.expression}\`` : ""
     }`,
   }),
-  default: (name, args) => ({
+  default: (name, _args) => ({
     icon: "M212,40a12,12,0,0,1-12,12H170.71A20,20,0,0,0,151,68.42L142.38,116H184a12,12,0,0,1,0,24H138l-9.44,51.87A44,44,0,0,1,85.29,228H56a12,12,0,0,1,0-24H85.29A20,20,0,0,0,105,187.58L113.62,140H72a12,12,0,0,1,0-24h46l9.44-51.87A44,44,0,0,1,170.71,28H200A12,12,0,0,1,212,40Z",
     message: `Called ${
       all_functions.includes(name)
@@ -305,16 +306,19 @@ export const Message = ({
   const textDisplay = useRef<HTMLParagraphElement>(null);
   const cardDisplay = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!isLoading && message.content && type == "card") {
-      const card = new AdaptiveCards.AdaptiveCard();
-      card.parse(message.content);
-      card.onExecuteAction = handleCardAction;
-      const elem = card.render();
-      if (cardDisplay.current?.firstChild) {
-        cardDisplay.current.removeChild(cardDisplay.current.firstChild);
+    (async () => {
+      if (!isLoading && message.content && type == "card") {
+        const cons = await adaptiveCardFactory();
+        const card = new cons();
+        card.parse(message.content);
+        card.onExecuteAction = handleCardAction;
+        const elem = card.render();
+        if (cardDisplay.current?.firstChild) {
+          cardDisplay.current.removeChild(cardDisplay.current.firstChild);
+        }
+        if (elem) cardDisplay.current!.appendChild(elem);
       }
-      if (elem) cardDisplay.current!.appendChild(elem);
-    }
+    })();
   }, [isLoading, message.content, type]);
 
   // const memoizedFunctionCalls = useMemo(

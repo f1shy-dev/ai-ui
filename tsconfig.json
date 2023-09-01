@@ -26,6 +26,7 @@
     },
     "typeRoots": ["./src/utils/*.d.ts"]
   },
-  "include": ["src", "old/app_old.tsx", "old/handleSubmit_with_teamsv1c.ts"],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules/**/*", "dist/**/*", "old/**/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

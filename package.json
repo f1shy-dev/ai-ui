@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@preact/compat": "^17.1.2",
     "@preact/signals": "^1.1.5",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-select": "^1.2.2",
@@ -20,6 +21,8 @@
     "mathjs": "^11.9.1",
     "nanoid": "^4.0.2",
     "preact": "^10.16.0",
+    "react": "npm:@preact/compat",
+    "react-dom": "npm:@preact/compat",
     "react-markdown": "^8.0.7",
     "rehype-raw": "^6.1.1",
     "remark-gfm": "^3.0.1",

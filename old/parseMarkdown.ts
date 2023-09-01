@@ -1,6 +1,6 @@
 import { Highlighter, Lang, getHighlighter } from "shiki";
 import { StateUpdater } from "preact/hooks";
-import { replaceAsync } from "./replaceAsync";
+import { replaceAsync } from "../src/utils/replaceAsync";
 
 export const parseMarkdown = async (
   content: string | undefined,

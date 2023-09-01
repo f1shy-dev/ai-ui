@@ -6,16 +6,14 @@ import {
 } from "./chatUtils";
 import { nanoid } from "nanoid";
 import { models } from "./models";
-import { Highlighter } from "shiki";
-import { StateUpdater } from "preact/hooks";
 import { modules } from "./modules";
 import { handleCommand } from "./modules/teams_mode";
 import { AuthState, openAIAuthState, teamsAuthState } from "./authState";
 import { settings } from "./settings";
 import { teamsEndpoint } from "./auth";
 import { OpenAIMessage, sseOpenAI } from "./sseOpenAI";
-import { all, create } from "mathjs";
-const math = create(all);
+import { mathFactory } from "./moduleFactory";
+
 type PistonRuntime = {
   language: string;
   version: string;
@@ -238,7 +236,7 @@ export const handleSubmit = async (
             },
             required: ["expression"],
           },
-          execute(args) {
+          async execute(args) {
             let scope = {};
             if (typeof args.scope == "object") {
               scope = args.scope;
@@ -251,6 +249,8 @@ export const handleSubmit = async (
               }
             }
             try {
+              // const result = math.evaluate(args.expression, scope);
+              const math = await mathFactory();
               const result = math.evaluate(args.expression, scope);
               console.log(`[evaluate_math] ${args.expression} = ${result}`);
               return [

@@ -90,6 +90,7 @@ export const handleCommand: ChatModule = async (
 };
 
 export const handleCardAction = async (action: Action) => {
+  console.log(typeof action, "toc");
   if (action instanceof SubmitAction || action instanceof ExecuteAction) {
     const responseID = nanoid();
     const card_id =

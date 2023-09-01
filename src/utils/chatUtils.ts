@@ -1,7 +1,7 @@
 export type SetMessages = StateUpdater<MessageType[]>;
 import { StateUpdater } from "preact/compat";
 import { FunctionCall, MessageType } from "./MessageType";
-import { effect, signal } from "@preact/signals";
+import { signal } from "@preact/signals";
 import { nanoid } from "nanoid";
 import { settings } from "./settings";
 
